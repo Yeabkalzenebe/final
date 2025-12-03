@@ -131,7 +131,7 @@
         }
 
         .hidden {
-            display: none;
+            display: none !important;
         }
 
         .role-section {
@@ -229,22 +229,17 @@
 
             <div class="form-group">
                 <label class="required">Department:</label>
-                <input type="text" id="department" name="department" required placeholder=" Computer Science">
+                <input type="text" id="department" name="department" required placeholder="e.g., Computer Science">
             </div>
 
             <div class="form-group">
                 <label class="required">Year:</label>
-                <input type="text" id="year" name="year" required placeholder=" 3rd year">
+                <input type="text" id="year" name="year" required placeholder="e.g., 3rd year">
             </div>
 
             <div class="form-group">
                 <label class="required">Team:</label>
-                <input type="text" id="team" name="team" required placeholder=" Horeb">
-            </div>
-
-            <div class="form-group">
-                <label class="required">Phone Number:</label>
-                <input type="number" id="number" required placeholder=" +251   ">
+                <input type="text" id="team" name="team" required placeholder="e.g., Horeb">
             </div>
 
             <div class="form-group">
@@ -333,8 +328,25 @@
             // Add role-specific data
             if (formData.role === "student") {
                 formData.category = document.getElementById('student_category').value;
+                if (!formData.category) {
+                    alert("Please select your skill category!");
+                    return;
+                }
             } else if (formData.role === "professional") {
                 formData.profession = document.getElementById('profession_type').value;
+                if (!formData.profession) {
+                    alert("Please select your profession!");
+                    return;
+                }
+            } else {
+                alert("Please select your role!");
+                return;
+            }
+
+            // Validate required fields
+            if (!formData.name || !formData.department || !formData.year || !formData.team) {
+                alert("Please fill all required fields!");
+                return;
             }
 
             // Save to localStorage
@@ -360,15 +372,14 @@
 
         function sendToBackend(data) {
             // This is where you would send data to a real backend
-            // Example using fetch:
+            // Example using Formspree (free form backend):
             /*
-            fetch('https://your-backend.com/api/register', {
+            fetch('https://formspree.io/f/YOUR_FORM_ID', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)
             })
-            .then(response => response.json())
-            .then(result => console.log('Backend response:', result))
+            .then(response => console.log('Sent to backend'))
             .catch(error => console.error('Error:', error));
             */
         }
@@ -378,15 +389,25 @@
             const studentSection = document.getElementById("student_section");
             const professionalSection = document.getElementById("professional_section");
             
+            console.log("Selected role:", role); // Debug log
+            
             // Hide both sections first
             studentSection.classList.add('hidden');
             professionalSection.classList.add('hidden');
             
+            // Remove required attributes initially
+            document.getElementById('student_category').required = false;
+            document.getElementById('profession_type').required = false;
+            
             if (role === "student") {
                 studentSection.classList.remove('hidden');
+                document.getElementById('student_category').required = true;
+                console.log("Showing student section");
             }
             else if (role === "professional") {
                 professionalSection.classList.remove('hidden');
+                document.getElementById('profession_type').required = true;
+                console.log("Showing professional section");
             }
         }
 
@@ -404,8 +425,25 @@
             }
         }
 
-        
-    
+        function viewRegistrations() {
+            const registrations = JSON.parse(localStorage.getItem('hackHawassaRegistrations') || '[]');
+            
+            if (registrations.length === 0) {
+                alert('No registrations found.');
+                return;
+            }
+            
+            let message = `Total Registrations: ${registrations.length}\n\n`;
+            registrations.forEach((reg, index) => {
+                let roleInfo = '';
+                if (reg.role === "student" && reg.category) {
+                    roleInfo = ` - ${reg.category}`;
+                } else if (reg.role === "professional" && reg.profession) {
+                    roleInfo = ` - ${reg.profession}`;
+                }
+                message += `${index + 1}. ${reg.name} (${reg.team}) - ${reg.role}${roleInfo}\n`;
+            });
+            
             alert(message);
             
             // Option to download as JSON
@@ -423,9 +461,13 @@
         // Initialize on page load
         window.onload = function() {
             updateCharCount();
-            showOptions();
+            showOptions(); // Initialize to show/hide based on default selection
+            
+            // Debug: Check if elements exist
+            console.log("Role select exists:", document.getElementById('role') !== null);
+            console.log("Student section exists:", document.getElementById('student_section') !== null);
+            console.log("Professional section exists:", document.getElementById('professional_section') !== null);
         }
     </script>
 </body>
 </html>
-
