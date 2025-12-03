@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hack-Hawassa Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #3053f1ff 0%, #ddd2e8ff 100%);
+            padding: 20px;
+        }
+
+        .background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(48, 83, 241, 0.1), rgba(221, 210, 232, 0.1));
+            z-index: -1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #0078ff;
+        }
+
+        .header h1 {
+            color: #0078ff;
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .header .subtitle {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #444;
+            font-size: 15px;
+        }
+
+        .required::after {
+            content: " *";
+            color: #e74c3c;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e1e5eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #0078ff;
+            box-shadow: 0 0 0 4px rgba(0, 120, 255, 0.15);
+            outline: none;
+            transform: translateY(-1px);
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #0078ff, #0056cc);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #0056cc, #004099);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 120, 255, 0.4);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .role-section {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+            border-left: 4px solid #0078ff;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .flash-message {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 25px;
+            animation: bounceIn 0.5s ease;
+            display: none;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .flash-message.show {
+            display: block;
+        }
+
+        .optional {
+            color: #666;
+            font-size: 0.9em;
+            font-weight: normal;
+        }
+
+        .char-count {
+            color: #666;
+            font-size: 0.85em;
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 26px;
+            }
+            
+            input, select, textarea {
+                padding: 12px;
+            }
+            
+            button {
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-overlay"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>Hack-Hawassa Registration</h1>
+            <div class="subtitle">
+                HOREB DS<br>
+                💻 DIGITAL MISSION<br>
+                ♾️ ETERNAL VISION
+            </div>
+        </div>
+        
+        <!-- Success Message -->
+        <div id="flashMessage" class="flash-message">
+            ✅ Registration submitted successfully!<br>
+            <small>Data saved locally. In production, connect to a backend.</small>
+        </div>
+
+        <form id="registrationForm" onsubmit="handleSubmit(event)">
+            <div class="form-group">
+                <label class="required">Full Name:</label>
+                <input type="text" id="name" name="name" required placeholder="Enter your full name">
+            </div>
+
+            <div class="form-group">
+                <label class="required">Department:</label>
+                <input type="text" id="department" name="department" required placeholder="e.g., Computer Science">
+            </div>
+
+            <div class="form-group">
+                <label class="required">Year:</label>
+                <input type="text" id="year" name="year" required placeholder="e.g., 3rd year">
+            </div>
+
+            <div class="form-group">
+                <label class="required">Team:</label>
+                <input type="text" id="team" name="team" required placeholder="e.g., Horeb">
+            </div>
+
+            <div class="form-group">
+                <label class="required">Register As:</label>
+                <select name="role" id="role" onchange="showOptions()" required>
+                    <option value="">-- Select Your Role --</option>
+                    <option value="student">🎓 Student</option>
+                    <option value="professional">💼 Professional</option>
+                </select>
+            </div>
+
+            <!-- STUDENT SECTION -->
+            <div id="student_section" class="role-section hidden">
+                <label class="required">Skill Category:</label>
+                <select name="student_category" id="student_category">
+                    <option value="">-- Select Your Skill --</option>
+                    <option value="Video - Cinematography">🎥 Video - Cinematography</option>
+                    <option value="Video - Editing">✂️ Video - Editing</option>
+                    <option value="Video - Acting">🎭 Video - Acting</option>
+                    <option value="Video - Writing">✍️ Video - Writing</option>
+                    <option value="Song - Mixing">🎵 Song - Mixing</option>
+                    <option value="Song - Writing">📝 Song - Writing</option>
+                    <option value="Song - Melody">🎶 Song - Melody</option>
+                    <option value="Developing - Front-end">💻 Developing - Front-end</option>
+                    <option value="Developing - Back-end">⚙️ Developing - Back-end</option>
+                    <option value="Developing - Full stack">🚀 Developing - Full Stack</option>
+                </select>
+            </div>
+
+            <!-- PROFESSIONAL SECTION -->
+            <div id="professional_section" class="role-section hidden">
+                <label class="required">Profession:</label>
+                <select name="profession_type" id="profession_type">
+                    <option value="">-- Select Your Profession --</option>
+                    <option value="Production">🎬 Production</option>
+                    <option value="Full Stack Developer">👨‍💻 Full Stack Developer</option>
+                    <option value="Song Maker">🎹 Song Maker</option>
+                </select>
+            </div>
+
+            <!-- EXPECTATIONS SECTION -->
+            <div class="form-group">
+                <label>What do you expect from this program? <span class="optional">(Optional)</span></label>
+                <textarea 
+                    name="expectations" 
+                    id="expectations"
+                    placeholder="Please share your expectations, goals, or what you hope to learn from Hack-Hawassa..."
+                    maxlength="500"
+                    oninput="updateCharCount()"
+                ></textarea>
+                <div class="char-count">
+                    <span id="charCount">0</span>/500 characters
+                </div>
+            </div>
+
+            <button type="submit">📝 Register Now</button>
+        </form>
+
+        
+    </div>
+
+    <script>
+        // Store registrations in localStorage
+        function saveRegistration(data) {
+            let registrations = JSON.parse(localStorage.getItem('hackHawassaRegistrations') || '[]');
+            data.id = Date.now(); // Add unique ID
+            data.timestamp = new Date().toLocaleString();
+            registrations.push(data);
+            localStorage.setItem('hackHawassaRegistrations', JSON.stringify(registrations));
+            return true;
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                department: document.getElementById('department').value,
+                year: document.getElementById('year').value,
+                team: document.getElementById('team').value,
+                role: document.getElementById('role').value,
+                expectations: document.getElementById('expectations').value,
+                timestamp: new Date().toISOString()
+            };
+
+            // Add role-specific data
+            if (formData.role === "student") {
+                formData.category = document.getElementById('student_category').value;
+            } else if (formData.role === "professional") {
+                formData.profession = document.getElementById('profession_type').value;
+            }
+
+            // Save to localStorage
+            if (saveRegistration(formData)) {
+                // Show success message
+                const flashMsg = document.getElementById('flashMessage');
+                flashMsg.classList.add('show');
+                
+                // Reset form
+                document.getElementById('registrationForm').reset();
+                showOptions();
+                updateCharCount();
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    flashMsg.classList.remove('show');
+                }, 5000);
+                
+                // Optional: Send to backend if available
+                sendToBackend(formData);
+            }
+        }
+
+        function sendToBackend(data) {
+            // This is where you would send data to a real backend
+            // Example using fetch:
+            /*
+            fetch('https://your-backend.com/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => console.log('Backend response:', result))
+            .catch(error => console.error('Error:', error));
+            */
+        }
+
+        function showOptions() {
+            let role = document.getElementById("role").value;
+            const studentSection = document.getElementById("student_section");
+            const professionalSection = document.getElementById("professional_section");
+            
+            // Hide both sections first
+            studentSection.classList.add('hidden');
+            professionalSection.classList.add('hidden');
+            
+            if (role === "student") {
+                studentSection.classList.remove('hidden');
+            }
+            else if (role === "professional") {
+                professionalSection.classList.remove('hidden');
+            }
+        }
+
+        function updateCharCount() {
+            const textarea = document.getElementById('expectations');
+            const charCount = document.getElementById('charCount');
+            charCount.textContent = textarea.value.length;
+            
+            if (textarea.value.length > 450) {
+                charCount.style.color = '#e74c3c';
+            } else if (textarea.value.length > 400) {
+                charCount.style.color = '#f39c12';
+            } else {
+                charCount.style.color = '#666';
+            }
+        }
+
+        
+    
+            alert(message);
+            
+            // Option to download as JSON
+            if (confirm('Download registrations as JSON file?')) {
+                const dataStr = JSON.stringify(registrations, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                const exportFileDefaultName = 'hack-hawassa-registrations.json';
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+            }
+        }
+
+        // Initialize on page load
+        window.onload = function() {
+            updateCharCount();
+            showOptions();
+        }
+    </script>
+</body>
+</html>
